@@ -29,20 +29,20 @@ type Review struct {
 }
 
 // GetReviews レビュー情報を取得します
-func GetReviews(tx *gorp.Transaction) ([]Along, error) {
+func GetReviews(tx *gorp.Transaction) ([]Review, error) {
 
-	alongs, err := selectToReviews(tx)
+	revies, err := selectToReviews(tx)
 	if err != nil {
-		return alongs, err
+		return revies, err
 	}
 
-	return alongs, nil
+	return revies, nil
 }
 
 // selectToReviews レビュー情報を検索します
-func selectToReviews(tx *gorp.Transaction) ([]Along, error) {
-	var alongs []Along
-	_, err := tx.Select(&alongs, `
+func selectToReviews(tx *gorp.Transaction) ([]Review, error) {
+	var revies []Review
+	_, err := tx.Select(&revies, `
 		select
 		  *
 		from
@@ -51,8 +51,8 @@ func selectToReviews(tx *gorp.Transaction) ([]Along, error) {
 		  review_id
 	`)
 	if err != nil {
-		return alongs, err
+		return revies, err
 	}
 
-	return alongs, nil
+	return revies, nil
 }

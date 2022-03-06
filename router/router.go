@@ -1,14 +1,14 @@
 package router
 
 import (
+	"beer-recommend-api/api"
+	"beer-recommend-api/db"
+	"beer-recommend-api/handler"
+	mw "beer-recommend-api/middleware"
 	"os"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/ymsht/beer-recommend-api/api"
-	"github.com/ymsht/beer-recommend-api/db"
-	"github.com/ymsht/beer-recommend-api/handler"
-	mw "github.com/ymsht/beer-recommend-api/middleware"
 )
 
 // Init 初期化

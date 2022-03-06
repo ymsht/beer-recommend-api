@@ -1,6 +1,6 @@
 package main
 
-import "github.com/ymsht/beer-recommend-api/router"
+import "beer-recommend-api/router"
 
 func main() {
 	e := router.Init()
