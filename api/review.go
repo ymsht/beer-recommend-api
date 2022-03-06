@@ -8,7 +8,7 @@ import (
 	"gopkg.in/gorp.v1"
 )
 
-// GetAlongs 沿線情報を返します
+// GetReviews レビュー情報を返します
 func GetReviews() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		tx := c.Get("Tx").(*gorp.Transaction)
