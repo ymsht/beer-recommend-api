@@ -17,7 +17,6 @@ type Review struct {
 	Beer_name   string         `db:"beer_name" json:"beer_name"`
 	Store       sql.NullString `db:"store" json:"store"`
 	Bar         sql.NullString `db:"bar" json:"bar"`
-	Evaluation  int            `db:"evaluation" json:"evaluation"`
 	Aroma       int            `db:"aroma" json:"aroma"`
 	BitterTaste int            `db:"bitterTaste" json:"bitterTaste"`
 	SweetTaste  int            `db:"sweetTaste" json:"sweetTaste"`
@@ -27,6 +26,7 @@ type Review struct {
 	Memo        sql.NullString `db:"memo" json:"memo"`
 	Create_date time.Time      `db:"create_date" json:"create_date"`
 	Update_date time.Time      `db:"update_date" json:"update_date"`
+	Evaluation  int            `db:"evaluation" json:"evaluation"`
 }
 
 // GetReviews レビュー情報を取得します
