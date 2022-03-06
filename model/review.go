@@ -17,12 +17,12 @@ type Review struct {
 	Beer_name   string         `db:"beer_name" json:"beer_name"`
 	Store       sql.NullString `db:"store" json:"store"`
 	Bar         sql.NullString `db:"bar" json:"bar"`
-	Aroma       int            `db:"aroma" json:"aroma"`
-	BitterTaste int            `db:"bitterTaste" json:"bitterTaste"`
-	SweetTaste  int            `db:"sweetTaste" json:"sweetTaste"`
-	Body        int            `db:"body" json:"body"`
-	Sharpness   int            `db:"sharpness" json:"sharpness"`
-	CountryId   int            `db:"country_id" json:"country_id"`
+	Aroma       sql.NullInt64  `db:"aroma" json:"aroma"`
+	BitterTaste sql.NullInt64  `db:"bitterTaste" json:"bitterTaste"`
+	SweetTaste  sql.NullInt64  `db:"sweetTaste" json:"sweetTaste"`
+	Body        sql.NullInt64  `db:"body" json:"body"`
+	Sharpness   sql.NullInt64  `db:"sharpness" json:"sharpness"`
+	CountryId   sql.NullInt64  `db:"country_id" json:"country_id"`
 	Memo        sql.NullString `db:"memo" json:"memo"`
 	Create_date time.Time      `db:"create_date" json:"create_date"`
 	Update_date time.Time      `db:"update_date" json:"update_date"`
