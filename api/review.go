@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
-	"github.com/ymsht/ymsht/beer-recommend-api/model"
+	"github.com/ymsht/beer-recommend-api/model"
 	"gopkg.in/gorp.v1"
 )
 
