@@ -13,11 +13,11 @@ func GetReviews() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		tx := c.Get("Tx").(*gorp.Transaction)
 
-		revies, err := model.GetReviews(tx)
+		reviews, err := model.GetReviews(tx)
 		if err != nil {
 			return err
 		}
 
-		return c.JSON(http.StatusOK, revies)
+		return c.JSON(http.StatusOK, reviews)
 	}
 }
