@@ -73,16 +73,14 @@ func selectToReviews(tx *gorp.Transaction) ([]Review, error) {
 // selectToReview レビュー情報を検索します
 func selectToReview(tx *gorp.Transaction) (Review, error) {
 	var review Review
-	_, err := tx.Select(&review, `
+	err := tx.SelectOne(&review, `
 		select
 		  *
 		from
 		  review
 		where
-			review_id = 1
-		order by
-		  review_id
-	`)
+			review_id = ?
+	`, 1)
 	if err != nil {
 		return review, err
 	}
