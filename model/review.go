@@ -41,6 +41,17 @@ func GetReviews(tx *gorp.Transaction) ([]Review, error) {
 	return reviews, nil
 }
 
+// GetReview レビュー情報を取得します
+func GetReview(tx *gorp.Transaction) (Review, error) {
+
+	review, err := selectToReview(tx)
+	if err != nil {
+		return review, err
+	}
+
+	return review, nil
+}
+
 // selectToReviews レビュー情報を検索します
 func selectToReviews(tx *gorp.Transaction) ([]Review, error) {
 	var reviews []Review
@@ -57,4 +68,24 @@ func selectToReviews(tx *gorp.Transaction) ([]Review, error) {
 	}
 
 	return reviews, nil
+}
+
+// selectToReview レビュー情報を検索します
+func selectToReview(tx *gorp.Transaction) (Review, error) {
+	var review Review
+	_, err := tx.Select(&review, `
+		select
+		  *
+		from
+		  review
+		where
+			review_id = 1
+		order by
+		  review_id
+	`)
+	if err != nil {
+		return review, err
+	}
+
+	return review, nil
 }

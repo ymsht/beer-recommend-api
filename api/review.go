@@ -21,3 +21,16 @@ func GetReviews() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, reviews)
 	}
 }
+
+func GetReview() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		tx := c.Get("Tx").(*gorp.Transaction)
+
+		review, err := model.GetReview(tx)
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(http.StatusOK, review)
+	}
+}
