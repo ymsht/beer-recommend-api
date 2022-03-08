@@ -9,25 +9,26 @@ import (
 
 // Review レビュー情報
 type Review struct {
-	ReviewID    int            `db:"review_id" json:"review_id"`
-	MemberId    int            `db:"member_id" json:"member_id"`
-	DrinkingDay time.Time      `db:"drinking_day" json:"drinking_day"`
-	IsPublic    bool           `db:"is_public" json:"is_public"`
-	Brewery     sql.NullString `db:"brewery" json:"brewery"`
-	Beer_name   string         `db:"beer_name" json:"beer_name"`
-	Store       sql.NullString `db:"store" json:"store"`
-	Bar         sql.NullString `db:"bar" json:"bar"`
-	Aroma       sql.NullInt64  `db:"aroma" json:"aroma"`
-	BitterTaste sql.NullInt64  `db:"bitterTaste" json:"bitterTaste"`
-	SweetTaste  sql.NullInt64  `db:"sweetTaste" json:"sweetTaste"`
-	Body        sql.NullInt64  `db:"body" json:"body"`
-	Sharpness   sql.NullInt64  `db:"sharpness" json:"sharpness"`
-	CountryId   sql.NullInt64  `db:"country_id" json:"country_id"`
-	Memo        sql.NullString `db:"memo" json:"memo"`
-	Create_date time.Time      `db:"create_date" json:"create_date"`
-	Update_date time.Time      `db:"update_date" json:"update_date"`
-	Evaluation  sql.NullInt64  `db:"evaluation" json:"evaluation"`
-	StyleId     sql.NullInt64  `db:"style_id" json:"style_id"`
+	ReviewID     int            `db:"review_id" json:"review_id"`
+	MemberId     int            `db:"member_id" json:"member_id"`
+	DrinkingDay  sql.NullTime   `db:"drinking_day" json:"drinking_day"`
+	IsPublic     bool           `db:"is_public" json:"is_public"`
+	Brewery      sql.NullString `db:"brewery" json:"brewery"`
+	Beer_name    string         `db:"beer_name" json:"beer_name"`
+	Store        sql.NullString `db:"store" json:"store"`
+	Bar          sql.NullString `db:"bar" json:"bar"`
+	Aroma        sql.NullInt64  `db:"aroma" json:"aroma"`
+	BitterTaste  sql.NullInt64  `db:"bitterTaste" json:"bitterTaste"`
+	SweetTaste   sql.NullInt64  `db:"sweetTaste" json:"sweetTaste"`
+	Body         sql.NullInt64  `db:"body" json:"body"`
+	Sharpness    sql.NullInt64  `db:"sharpness" json:"sharpness"`
+	CountryId    sql.NullInt64  `db:"country_id" json:"country_id"`
+	Memo         sql.NullString `db:"memo" json:"memo"`
+	Create_date  time.Time      `db:"create_date" json:"create_date"`
+	Update_date  time.Time      `db:"update_date" json:"update_date"`
+	Evaluation   sql.NullInt64  `db:"evaluation" json:"evaluation"`
+	StyleId      sql.NullInt64  `db:"style_id" json:"style_id"`
+	PurchaseDate sql.NullTime   `db:"purchase_date" json:"purchase_date"`
 }
 
 // GetReviews レビュー情報を取得します
