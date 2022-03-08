@@ -53,6 +53,16 @@ func GetReview(tx *gorp.Transaction) (Review, error) {
 	return review, nil
 }
 
+func CreateReview(tx *gorp.Transaction, r Review) error {
+
+	err := insertToReview(tx, r)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // selectToReviews レビュー情報を検索します
 func selectToReviews(tx *gorp.Transaction) ([]Review, error) {
 	var reviews []Review
@@ -87,4 +97,13 @@ func selectToReview(tx *gorp.Transaction) (Review, error) {
 	}
 
 	return review, nil
+}
+
+func insertToReview(tx *gorp.Transaction, r Review) error {
+	err := tx.Insert(r)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

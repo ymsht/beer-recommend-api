@@ -34,3 +34,22 @@ func GetReview() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, review)
 	}
 }
+
+func CreateReview() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		var r model.Review
+		if err := c.Bind(&r); err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		tx := c.Get("Tx").(*gorp.Transaction)
+
+		err := model.CreateReview(tx, r)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusOK, "ok")
+	}
+}
