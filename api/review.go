@@ -3,6 +3,7 @@ package api
 import (
 	"beer-recommend-api/model"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo"
 	"gopkg.in/gorp.v1"
@@ -24,10 +25,11 @@ func GetReviews() echo.HandlerFunc {
 
 func GetReview() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		//id := c.Param("review_id")
+		id_str := c.Param("id")
 		tx := c.Get("Tx").(*gorp.Transaction)
 
-		review, err := model.GetReview(tx)
+		id, _ := strconv.Atoi(id_str)
+		review, err := model.GetReview(tx, id)
 		if err != nil {
 			return err
 		}
@@ -43,15 +45,14 @@ func CreateReview() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err)
 		}
-		return c.JSON(http.StatusOK, r)
 
-		// tx := c.Get("Tx").(*gorp.Transaction)
+		tx := c.Get("Tx").(*gorp.Transaction)
 
-		// err := model.CreateReview(tx, r)
-		// if err != nil {
-		// 	return c.JSON(http.StatusInternalServerError, err)
-		// }
+		err = model.CreateReview(tx, r)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
 
-		// return c.JSON(http.StatusOK, "ok")
+		return c.JSON(http.StatusCreated, r)
 	}
 }
