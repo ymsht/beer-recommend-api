@@ -139,7 +139,7 @@ func selectToReview(tx *gorp.Transaction, id int) (Review, error) {
 }
 
 func insertToReview(tx *gorp.Transaction, r Review) error {
-	err := tx.Insert(r)
+	err := tx.Insert(&r)
 	if err != nil {
 		return err
 	}

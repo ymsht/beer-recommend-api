@@ -1,6 +1,7 @@
 package db
 
 import (
+	"beer-recommend-api/model"
 	"database/sql"
 	"fmt"
 
@@ -38,6 +39,7 @@ func getDbMap() *gorp.DbMap {
 	}
 
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{}}
+	dbmap.AddTableWithName(model.Review{}, "review")
 
 	return dbmap
 }

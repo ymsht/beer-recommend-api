@@ -43,6 +43,7 @@ func CreateReview() echo.HandlerFunc {
 		var r model.Review
 		err := c.Bind(&r)
 		if err != nil {
+			c.Logger().Error(err.Error())
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 
@@ -50,6 +51,7 @@ func CreateReview() echo.HandlerFunc {
 
 		err = model.CreateReview(tx, r)
 		if err != nil {
+			c.Logger().Error(err.Error())
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 
