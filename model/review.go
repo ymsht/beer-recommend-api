@@ -38,6 +38,7 @@ type Review struct {
 	Evaluation   NullInt64    `db:"evaluation" json:"evaluation"`
 	StyleId      NullInt64    `db:"style_id" json:"style_id"`
 	PurchaseDate sql.NullTime `db:"purchase_date" json:"purchase_date"`
+	Acidity      NullInt64    `db:"acidity" json:"acidity"`
 }
 
 func (s NullString) MarshalJSON() ([]byte, error) {
