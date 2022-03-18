@@ -134,7 +134,7 @@ func selectToReviews(tx *gorp.Transaction) ([]Review, error) {
 		from
 		  review
 		order by
-		  review_id
+		  evaluation desc
 	`)
 	if err != nil {
 		return reviews, err
