@@ -96,12 +96,12 @@ func (i *NullInt64) UnmarshalJSON(data []byte) error {
 // GetReviews レビュー情報を取得します
 func GetReviews(tx *gorp.Transaction) ([]Review, error) {
 
-	reviews, err := selectToReviews(tx)
+	r, err := selectToReviews(tx)
 	if err != nil {
-		return reviews, err
+		return r, err
 	}
 
-	return reviews, nil
+	return r, nil
 }
 
 // GetReview レビュー情報を取得します
