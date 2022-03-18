@@ -41,6 +41,28 @@ type Review struct {
 	Acidity      NullInt64    `db:"acidity" json:"acidity"`
 }
 
+// ReviewDetail レビュー詳細情報
+type ReviewDetail struct {
+	ReviewID     int        `db:"review_id" json:"review_id"`
+	DrinkingDay  NullString `db:"drinking_day" json:"drinking_day"`
+	IsPublic     bool       `db:"is_public" json:"is_public"`
+	Brewery      NullString `db:"brewery" json:"brewery"`
+	Beer_name    string     `db:"beer_name" json:"beer_name"`
+	Store        NullString `db:"store" json:"store"`
+	Bar          NullString `db:"bar" json:"bar"`
+	Aroma        NullInt64  `db:"aroma" json:"aroma"`
+	BitterTaste  NullInt64  `db:"bitterTaste" json:"bitterTaste"`
+	SweetTaste   NullInt64  `db:"sweetTaste" json:"sweetTaste"`
+	Body         NullInt64  `db:"body" json:"body"`
+	Sharpness    NullInt64  `db:"sharpness" json:"sharpness"`
+	Memo         NullString `db:"memo" json:"memo"`
+	Evaluation   NullInt64  `db:"evaluation" json:"evaluation"`
+	PurchaseDate NullString `db:"purchase_date" json:"purchase_date"`
+	Acidity      NullInt64  `db:"acidity" json:"acidity"`
+	CountryName  NullString `db:"country_name" json:"country_name"`
+	StyleName    NullString `db:"style_name" json:"style_name"`
+}
+
 func (s NullString) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s.String)
 }
@@ -83,14 +105,14 @@ func GetReviews(tx *gorp.Transaction) ([]Review, error) {
 }
 
 // GetReview レビュー情報を取得します
-func GetReview(tx *gorp.Transaction, id int) (Review, error) {
+func GetReview(tx *gorp.Transaction, id int) (ReviewDetail, error) {
 
-	review, err := selectToReview(tx, id)
+	r, err := selectToReview(tx, id)
 	if err != nil {
-		return review, err
+		return r, err
 	}
 
-	return review, nil
+	return r, nil
 }
 
 func CreateReview(tx *gorp.Transaction, r Review) error {
@@ -122,21 +144,40 @@ func selectToReviews(tx *gorp.Transaction) ([]Review, error) {
 }
 
 // selectToReview レビュー情報を検索します
-func selectToReview(tx *gorp.Transaction, id int) (Review, error) {
-	var review Review
-	err := tx.SelectOne(&review, `
+func selectToReview(tx *gorp.Transaction, id int) (ReviewDetail, error) {
+	var r ReviewDetail
+	err := tx.SelectOne(&r, `
 		select
-		  *
+			r.review_id,
+		  ifnull(r.drinking_day, '') as drinking_day,
+			r.is_public,
+			r.brewery,
+			r.beer_name,
+			r.store,
+			r.bar,
+			r.aroma,
+			r.bitterTaste,
+			r.sweetTaste,
+			r.body,
+			r.sharpness,
+			r.memo,
+			r.evaluation,
+			ifnull(r.purchase_date, '') as purchase_date,
+			r.acidity,
+		  c.country_name,
+			s.style_name
 		from
-		  review
+		  review r
+			left join country c on r.country_id = c.country_id
+			left join style s on r.style_id = s.style_id
 		where
 			review_id = ?
 	`, id)
 	if err != nil {
-		return review, err
+		return r, err
 	}
 
-	return review, nil
+	return r, nil
 }
 
 func insertToReview(tx *gorp.Transaction, r Review) error {

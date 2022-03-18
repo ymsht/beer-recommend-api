@@ -29,12 +29,12 @@ func GetReview() echo.HandlerFunc {
 		tx := c.Get("Tx").(*gorp.Transaction)
 
 		id, _ := strconv.Atoi(id_str)
-		review, err := model.GetReview(tx, id)
+		r, err := model.GetReview(tx, id)
 		if err != nil {
 			return err
 		}
 
-		return c.JSON(http.StatusOK, review)
+		return c.JSON(http.StatusOK, r)
 	}
 }
 
