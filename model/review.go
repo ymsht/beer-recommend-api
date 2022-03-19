@@ -27,8 +27,8 @@ type Review struct {
 	Store        NullString   `db:"store" json:"store"`
 	Bar          NullString   `db:"bar" json:"bar"`
 	Aroma        NullInt64    `db:"aroma" json:"aroma"`
-	BitterTaste  NullInt64    `db:"bitterTaste" json:"bitterTaste"`
-	SweetTaste   NullInt64    `db:"sweetTaste" json:"sweetTaste"`
+	BitterTaste  NullInt64    `db:"bitter_taste" json:"bitter_taste"`
+	SweetTaste   NullInt64    `db:"sweet_taste" json:"sweet_taste"`
 	Body         NullInt64    `db:"body" json:"body"`
 	Sharpness    NullInt64    `db:"sharpness" json:"sharpness"`
 	CountryId    NullInt64    `db:"country_id" json:"country_id"`
@@ -51,8 +51,8 @@ type ReviewDetail struct {
 	Store        NullString `db:"store" json:"store"`
 	Bar          NullString `db:"bar" json:"bar"`
 	Aroma        NullInt64  `db:"aroma" json:"aroma"`
-	BitterTaste  NullInt64  `db:"bitterTaste" json:"bitterTaste"`
-	SweetTaste   NullInt64  `db:"sweetTaste" json:"sweetTaste"`
+	BitterTaste  NullInt64  `db:"bitter_taste" json:"bitter_taste"`
+	SweetTaste   NullInt64  `db:"sweet_taste" json:"sweet_taste"`
 	Body         NullInt64  `db:"body" json:"body"`
 	Sharpness    NullInt64  `db:"sharpness" json:"sharpness"`
 	Memo         NullString `db:"memo" json:"memo"`
@@ -156,8 +156,8 @@ func selectToReview(tx *gorp.Transaction, id int) (ReviewDetail, error) {
 			r.store,
 			r.bar,
 			r.aroma,
-			r.bitterTaste,
-			r.sweetTaste,
+			r.bitter_taste,
+			r.sweet_taste,
 			r.body,
 			r.sharpness,
 			r.memo,
