@@ -77,6 +77,10 @@ func (i NullInt64) MarshalJSON() ([]byte, error) {
 	return json.Marshal(i.Int64)
 }
 
+func (f NullFloat64) MarshalJSON() ([]byte, error) {
+	return json.Marshal(f.Float64)
+}
+
 func (s *NullString) UnmarshalJSON(data []byte) error {
 	var str string
 	err := json.Unmarshal(data, &str)
@@ -96,6 +100,17 @@ func (i *NullInt64) UnmarshalJSON(data []byte) error {
 	}
 	i.Int64 = intger
 	i.Valid = intger != 0
+	return nil
+}
+
+func (i *NullFloat64) UnmarshalJSON(data []byte) error {
+	var float float64
+	err := json.Unmarshal(data, &float)
+	if err != nil {
+		return err
+	}
+	i.Float64 = float
+	i.Valid = float != 0
 	return nil
 }
 
