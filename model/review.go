@@ -16,6 +16,10 @@ type NullInt64 struct {
 	sql.NullInt64
 }
 
+type NullFloat64 struct {
+	sql.NullFloat64
+}
+
 // Review レビュー情報
 type Review struct {
 	ReviewID     int          `db:"review_id" json:"review_id"`
@@ -35,32 +39,34 @@ type Review struct {
 	Memo         NullString   `db:"memo" json:"memo"`
 	Create_date  time.Time    `db:"create_date" json:"create_date"`
 	Update_date  time.Time    `db:"update_date" json:"update_date"`
-	Evaluation   NullInt64    `db:"evaluation" json:"evaluation"`
+	Evaluation   NullFloat64  `db:"evaluation" json:"evaluation"`
 	StyleId      NullInt64    `db:"style_id" json:"style_id"`
 	PurchaseDate sql.NullTime `db:"purchase_date" json:"purchase_date"`
 	Acidity      NullInt64    `db:"acidity" json:"acidity"`
+	FlavorId     NullInt64    `db:"flavor_id" json:"flavor_id"`
 }
 
 // ReviewDetail レビュー詳細情報
 type ReviewDetail struct {
-	ReviewID     int        `db:"review_id" json:"review_id"`
-	DrinkingDay  NullString `db:"drinking_day" json:"drinking_day"`
-	IsPublic     bool       `db:"is_public" json:"is_public"`
-	Brewery      NullString `db:"brewery" json:"brewery"`
-	Beer_name    string     `db:"beer_name" json:"beer_name"`
-	Store        NullString `db:"store" json:"store"`
-	Bar          NullString `db:"bar" json:"bar"`
-	Aroma        NullInt64  `db:"aroma" json:"aroma"`
-	BitterTaste  NullInt64  `db:"bitter_taste" json:"bitter_taste"`
-	SweetTaste   NullInt64  `db:"sweet_taste" json:"sweet_taste"`
-	Body         NullInt64  `db:"body" json:"body"`
-	Sharpness    NullInt64  `db:"sharpness" json:"sharpness"`
-	Memo         NullString `db:"memo" json:"memo"`
-	Evaluation   NullInt64  `db:"evaluation" json:"evaluation"`
-	PurchaseDate NullString `db:"purchase_date" json:"purchase_date"`
-	Acidity      NullInt64  `db:"acidity" json:"acidity"`
-	CountryName  NullString `db:"country_name" json:"country_name"`
-	StyleName    NullString `db:"style_name" json:"style_name"`
+	ReviewID     int         `db:"review_id" json:"review_id"`
+	DrinkingDay  NullString  `db:"drinking_day" json:"drinking_day"`
+	IsPublic     bool        `db:"is_public" json:"is_public"`
+	Brewery      NullString  `db:"brewery" json:"brewery"`
+	Beer_name    string      `db:"beer_name" json:"beer_name"`
+	Store        NullString  `db:"store" json:"store"`
+	Bar          NullString  `db:"bar" json:"bar"`
+	Aroma        NullInt64   `db:"aroma" json:"aroma"`
+	BitterTaste  NullInt64   `db:"bitter_taste" json:"bitter_taste"`
+	SweetTaste   NullInt64   `db:"sweet_taste" json:"sweet_taste"`
+	Body         NullInt64   `db:"body" json:"body"`
+	Sharpness    NullInt64   `db:"sharpness" json:"sharpness"`
+	Memo         NullString  `db:"memo" json:"memo"`
+	Evaluation   NullFloat64 `db:"evaluation" json:"evaluation"`
+	PurchaseDate NullString  `db:"purchase_date" json:"purchase_date"`
+	Acidity      NullInt64   `db:"acidity" json:"acidity"`
+	CountryName  NullString  `db:"country_name" json:"country_name"`
+	StyleName    NullString  `db:"style_name" json:"style_name"`
+	FlavorName   NullString  `db:"flavor_name" json:"flavor_name"`
 }
 
 func (s NullString) MarshalJSON() ([]byte, error) {
@@ -165,11 +171,13 @@ func selectToReview(tx *gorp.Transaction, id int) (ReviewDetail, error) {
 			ifnull(r.purchase_date, '') as purchase_date,
 			r.acidity,
 		  c.country_name,
-			s.style_name
+			s.style_name,
+			f.flavor_name
 		from
 		  review r
 			left join country c on r.country_id = c.country_id
 			left join style s on r.style_id = s.style_id
+			left join flavor f on r.flavor_id = f.flavor_id
 		where
 			review_id = ?
 	`, id)
