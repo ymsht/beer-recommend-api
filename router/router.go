@@ -46,6 +46,8 @@ func Init() *echo.Echo {
 		v1.POST("/review", api.CreateReview())
 
 		v1.GET("/flavors", api.GetFlavors())
+
+		v1.GET("/styles", api.GetStyles())
 	}
 
 	return e
