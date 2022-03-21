@@ -22,7 +22,7 @@ type NullFloat64 struct {
 
 // Review レビュー情報
 type Review struct {
-	ReviewID     int          `db:"review_id" json:"review_id"`
+	ReviewId     int          `db:"review_id" json:"review_id"`
 	MemberId     int          `db:"member_id" json:"member_id"`
 	DrinkingDay  sql.NullTime `db:"drinking_day" json:"drinking_day"`
 	IsPublic     bool         `db:"is_public" json:"is_public"`
@@ -44,6 +44,7 @@ type Review struct {
 	PurchaseDate sql.NullTime `db:"purchase_date" json:"purchase_date"`
 	Acidity      NullInt64    `db:"acidity" json:"acidity"`
 	FlavorId     NullInt64    `db:"flavor_id" json:"flavor_id"`
+	AreaId       NullInt64    `db:"area_id" json:"area_id"`
 }
 
 // ReviewDetail レビュー詳細情報
@@ -67,6 +68,7 @@ type ReviewDetail struct {
 	CountryName  NullString  `db:"country_name" json:"country_name"`
 	StyleName    NullString  `db:"style_name" json:"style_name"`
 	FlavorName   NullString  `db:"flavor_name" json:"flavor_name"`
+	AreaName     NullString  `db:"area_name" json:"area_name"`
 }
 
 func (s NullString) MarshalJSON() ([]byte, error) {
@@ -187,12 +189,14 @@ func selectToReview(tx *gorp.Transaction, id int) (ReviewDetail, error) {
 			r.acidity,
 		  c.country_name,
 			s.style_name,
-			f.flavor_name
+			f.flavor_name,
+			a.area_name
 		from
 		  review r
 			left join country c on r.country_id = c.country_id
 			left join style s on r.style_id = s.style_id
 			left join flavor f on r.flavor_id = f.flavor_id
+			left join area a on r.area_id = a.area_id
 		where
 			review_id = ?
 	`, id)

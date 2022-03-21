@@ -41,6 +41,8 @@ func getDbMap() *gorp.DbMap {
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{}}
 	dbmap.AddTableWithName(model.Review{}, "review")
 	dbmap.AddTableWithName(model.Flavor{}, "flavor")
+	dbmap.AddTableWithName(model.Country{}, "country")
+	dbmap.AddTableWithName(model.Area{}, "area")
 
 	return dbmap
 }
