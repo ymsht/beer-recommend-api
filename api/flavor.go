@@ -15,7 +15,8 @@ func GetFlavors() echo.HandlerFunc {
 
 		f, err := model.GetFlavors(tx)
 		if err != nil {
-			return err
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, err)
 		}
 
 		return c.JSON(http.StatusOK, f)

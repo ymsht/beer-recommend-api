@@ -15,7 +15,8 @@ func GetAreas() echo.HandlerFunc {
 
 		a, err := model.GetAreas(tx)
 		if err != nil {
-			return err
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, err)
 		}
 
 		return c.JSON(http.StatusOK, a)

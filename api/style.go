@@ -15,7 +15,8 @@ func GetStyles() echo.HandlerFunc {
 
 		s, err := model.GetStyles(tx)
 		if err != nil {
-			return err
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, err)
 		}
 
 		return c.JSON(http.StatusOK, s)
