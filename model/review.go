@@ -148,8 +148,8 @@ func CreateReview(tx *gorp.Transaction, r Review) error {
 
 // selectToReviews レビュー情報を検索します
 func selectToReviews(tx *gorp.Transaction) ([]Review, error) {
-	var reviews []Review
-	_, err := tx.Select(&reviews, `
+	var r []Review
+	_, err := tx.Select(&r, `
 		select
 		  *
 		from
@@ -158,10 +158,10 @@ func selectToReviews(tx *gorp.Transaction) ([]Review, error) {
 		  evaluation desc
 	`)
 	if err != nil {
-		return reviews, err
+		return r, err
 	}
 
-	return reviews, nil
+	return r, nil
 }
 
 // selectToReview レビュー情報を検索します
