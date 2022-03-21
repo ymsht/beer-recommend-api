@@ -48,6 +48,10 @@ func Init() *echo.Echo {
 		v1.GET("/flavors", api.GetFlavors())
 
 		v1.GET("/styles", api.GetStyles())
+
+		v1.GET("/countries", api.GetCountries())
+
+		v1.GET("/areas", api.GetAreas())
 	}
 
 	return e
