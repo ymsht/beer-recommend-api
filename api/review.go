@@ -16,7 +16,7 @@ func GetReviews() echo.HandlerFunc {
 
 		r, err := model.GetReviews(tx)
 		if err != nil {
-			return err
+			return c.JSON(http.StatusInternalServerError, err)
 		}
 
 		return c.JSON(http.StatusOK, r)
@@ -31,7 +31,7 @@ func GetReview() echo.HandlerFunc {
 		id, _ := strconv.Atoi(id_str)
 		r, err := model.GetReview(tx, id)
 		if err != nil {
-			return err
+			return c.JSON(http.StatusInternalServerError, err)
 		}
 
 		return c.JSON(http.StatusOK, r)
