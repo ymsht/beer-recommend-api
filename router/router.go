@@ -5,10 +5,8 @@ import (
 	"beer-recommend-api/db"
 	"beer-recommend-api/handler"
 	mw "beer-recommend-api/middleware"
-	"io/ioutil"
 	"os"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -41,24 +39,9 @@ func Init() *echo.Echo {
 
 	e.Use(mw.TransactionHandler(db.Init()))
 
-	e.POST("/api/v1/login", api.Login())
-
-	keyData, err := ioutil.ReadFile("es256.pub.key")
-	if err != nil {
-		panic(err)
-	}
-	key, err := jwt.ParseECPublicKeyFromPEM(keyData)
-	if err != nil {
-		panic(err)
-	}
-
 	v1 := e.Group("/api/v1")
 	{
-		config := middleware.JWTConfig{
-			Claims:     &api.JwtCustomClaims{},
-			SigningKey: key,
-		}
-		v1.Use(middleware.JWTWithConfig(config))
+		v1.POST("/login", api.Login())
 
 		v1.GET("/reviews", api.GetReviews())
 		v1.GET("/review/:id", api.GetReview())
@@ -71,8 +54,6 @@ func Init() *echo.Echo {
 		v1.GET("/countries", api.GetCountries())
 
 		v1.GET("/areas", api.GetAreas())
-
-		v1.GET("/restricted", api.Restricted())
 	}
 
 	return e
