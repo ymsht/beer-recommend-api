@@ -36,7 +36,7 @@ func Login() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 
-		err = bcrypt.CompareHashAndPassword(hashed, []byte(u.Password))
+		err = bcrypt.CompareHashAndPassword(hashed, []byte(l.Password))
 		if err == bcrypt.ErrMismatchedHashAndPassword {
 			return c.JSON(http.StatusUnauthorized, err)
 		}
