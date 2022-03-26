@@ -27,7 +27,7 @@ func Login() echo.HandlerFunc {
 
 		u, err := model.GethUser(tx, l.UserName)
 		if err != nil {
-			return c.JSON(http.StatusUnauthorized, err)
+			return echo.ErrUnauthorized
 		}
 
 		password := []byte(l.Password)
@@ -38,7 +38,7 @@ func Login() echo.HandlerFunc {
 
 		err = bcrypt.CompareHashAndPassword(hashed, []byte(l.Password))
 		if err == bcrypt.ErrMismatchedHashAndPassword {
-			return c.JSON(http.StatusUnauthorized, err)
+			return echo.ErrUnauthorized
 		}
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err)
