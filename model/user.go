@@ -6,7 +6,7 @@ import (
 	"gopkg.in/gorp.v1"
 )
 
-type Login struct {
+type User struct {
 	UserId      int       `db:"user_id" json:"user_id"`
 	UserName    string    `db:"user_name" json:"user_name"`
 	Password    string    `db:"password" json:"password"`
@@ -14,7 +14,8 @@ type Login struct {
 	Update_date time.Time `db:"update_date" json:"update_date"`
 }
 
-func GethUser(tx *gorp.Transaction, n string) (Login, error) {
+// GethUser ユーザ情報を返します
+func GethUser(tx *gorp.Transaction, n string) (User, error) {
 	u, err := searchUser(tx, n)
 	if err != nil {
 		return u, err
@@ -23,8 +24,9 @@ func GethUser(tx *gorp.Transaction, n string) (Login, error) {
 	return u, nil
 }
 
-func searchUser(tx *gorp.Transaction, n string) (Login, error) {
-	var u Login
+// searchUser ユーザを検索します
+func searchUser(tx *gorp.Transaction, n string) (User, error) {
+	var u User
 	err := tx.SelectOne(&u, `
 		select
 		  *
@@ -38,4 +40,14 @@ func searchUser(tx *gorp.Transaction, n string) (Login, error) {
 	}
 
 	return u, nil
+}
+
+// CreateUser ユーザを登録します
+func CreateUser(tx *gorp.Transaction, u User) error {
+	err := tx.Insert(&u)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

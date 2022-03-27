@@ -33,13 +33,6 @@ func Login() echo.HandlerFunc {
 			return echo.ErrUnauthorized
 		}
 
-		// 会員登録で使う処理
-		// hashed, err := bcrypt.GenerateFromPassword([]byte(l.Password), bcrypt.DefaultCost)
-		// if err != nil {
-		// 	return c.JSON(http.StatusInternalServerError, err)
-		// }
-		// c.Logger().Error("hash:", string(hashed))
-
 		err = bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(l.Password))
 		if err == bcrypt.ErrMismatchedHashAndPassword {
 			c.Logger().Error("パスワード不一致")
