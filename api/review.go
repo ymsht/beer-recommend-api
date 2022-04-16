@@ -13,7 +13,6 @@ import (
 func GetReviews() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		tx := c.Get("Tx").(*gorp.Transaction)
-
 		r, err := model.GetReviews(tx)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err)

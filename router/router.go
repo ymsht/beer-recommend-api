@@ -39,9 +39,11 @@ func Init() *echo.Echo {
 
 	e.Use(mw.TransactionHandler(db.Init()))
 
+	e.POST("/api/login", api.Login())
+
 	v1 := e.Group("/api/v1")
 	{
-		v1.POST("/login", api.Login())
+		v1.Use(middleware.JWT([]byte(api.SECRET)))
 
 		v1.GET("/reviews", api.GetReviews())
 		v1.GET("/review/:id", api.GetReview())
