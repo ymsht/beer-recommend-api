@@ -43,6 +43,7 @@ func getDbMap() *gorp.DbMap {
 	dbmap.AddTableWithName(model.Flavor{}, "flavor")
 	dbmap.AddTableWithName(model.Country{}, "country")
 	dbmap.AddTableWithName(model.Area{}, "area")
+	dbmap.AddTableWithName(model.User{}, "user")
 
 	return dbmap
 }
