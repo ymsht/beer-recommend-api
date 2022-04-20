@@ -3,7 +3,9 @@ package api
 import (
 	"beer-recommend-api/model"
 	"net/http"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/gorp.v1"
@@ -39,6 +41,12 @@ func Signup() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		return c.JSON(http.StatusOK, u)
+		token := jwt.New(jwt.SigningMethodHS256)
+		claims := token.Claims.(jwt.MapClaims)
+		claims["name"] = u.UserName
+		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+		tokenString, _ := token.SignedString([]byte(SECRET))
+
+		return c.JSON(http.StatusOK, map[string]string{"token": tokenString})
 	}
 }
