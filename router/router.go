@@ -40,6 +40,7 @@ func Init() *echo.Echo {
 	e.Use(mw.TransactionHandler(db.Init()))
 
 	e.POST("/api/login", api.Login())
+	e.POST("/api/signup", api.Signup())
 
 	v1 := e.Group("/api/v1")
 	{
