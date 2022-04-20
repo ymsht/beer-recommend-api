@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"gopkg.in/gorp.v1"
 )
@@ -39,6 +40,10 @@ func GetReview() echo.HandlerFunc {
 
 func CreateReview() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		token := c.Get("user").(*jwt.Token)
+		claims := token.Claims.(jwt.MapClaims)
+		name := claims["name"].(string)
+
 		var r model.Review
 		err := c.Bind(&r)
 		if err != nil {
@@ -47,6 +52,13 @@ func CreateReview() echo.HandlerFunc {
 		}
 
 		tx := c.Get("Tx").(*gorp.Transaction)
+
+		u, err := model.GethUser(tx, name)
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+		r.MemberId = u.UserId
 
 		err = model.CreateReview(tx, r)
 		if err != nil {
