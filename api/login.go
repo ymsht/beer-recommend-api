@@ -47,7 +47,7 @@ func Login() echo.HandlerFunc {
 		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)
 		claims["name"] = u.UserName
-		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 		tokenString, _ := token.SignedString([]byte(SECRET))
 
 		return c.JSON(http.StatusOK, map[string]string{"token": tokenString})
