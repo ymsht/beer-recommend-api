@@ -45,6 +45,7 @@ type Review struct {
 	Acidity      NullInt64    `db:"acidity" json:"acidity"`
 	FlavorId     NullInt64    `db:"flavor_id" json:"flavor_id"`
 	AreaId       NullInt64    `db:"area_id" json:"area_id"`
+	BeerId       NullInt64    `db:"beer_id" json:"beer_id"`
 }
 
 // ReviewDetail レビュー詳細情報
@@ -69,6 +70,7 @@ type ReviewDetail struct {
 	StyleName    NullString  `db:"style_name" json:"style_name"`
 	FlavorName   NullString  `db:"flavor_name" json:"flavor_name"`
 	AreaName     NullString  `db:"area_name" json:"area_name"`
+	ImagePath    NullString  `db:"image_path" json:"image_path"`
 }
 
 func (s NullString) MarshalJSON() ([]byte, error) {
@@ -174,8 +176,8 @@ func selectToReview(tx *gorp.Transaction, id int) (ReviewDetail, error) {
 			r.review_id,
 		  ifnull(r.drinking_day, '') as drinking_day,
 			r.is_public,
-			r.brewery,
-			r.beer_name,
+			bw.brewery_name,
+			b.beer_name,
 			r.store,
 			r.bar,
 			r.aroma,
@@ -190,9 +192,13 @@ func selectToReview(tx *gorp.Transaction, id int) (ReviewDetail, error) {
 		  c.country_name,
 			s.style_name,
 			f.flavor_name,
-			a.area_name
+			a.area_name,
+			bi.image_path
 		from
 		  review r
+			inner join beer b on r.beer_id = b.beer_id
+			inner join beer_image bi on beer_id = bi.beer_id
+			inner join brewery bw on b.brewery_id = bw.brewery_id
 			left join country c on r.country_id = c.country_id
 			left join style s on r.style_id = s.style_id
 			left join flavor f on r.flavor_id = f.flavor_id
