@@ -24,6 +24,19 @@ func GetReviews() echo.HandlerFunc {
 	}
 }
 
+func GetReviewsSummary() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		tx := c.Get("Tx").(*gorp.Transaction)
+		r, err := model.GetReviewsSummary(tx)
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusOK, r)
+	}
+}
+
 func GetReview() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id_str := c.Param("id")

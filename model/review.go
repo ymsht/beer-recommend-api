@@ -26,8 +26,8 @@ type Review struct {
 	MemberId     int          `db:"member_id" json:"member_id"`
 	DrinkingDay  sql.NullTime `db:"drinking_day" json:"drinking_day"`
 	IsPublic     bool         `db:"is_public" json:"is_public"`
-	Brewery      NullString   `db:"brewery" json:"brewery"`
-	Beer_name    string       `db:"beer_name" json:"beer_name"`
+	BreweryName  NullString   `db:"brewery_name" json:"brewery_name"`
+	BeerName     string       `db:"beer_name" json:"beer_name"`
 	Store        NullString   `db:"store" json:"store"`
 	Bar          NullString   `db:"bar" json:"bar"`
 	Aroma        NullInt64    `db:"aroma" json:"aroma"`
@@ -46,6 +46,13 @@ type Review struct {
 	FlavorId     NullInt64    `db:"flavor_id" json:"flavor_id"`
 	AreaId       NullInt64    `db:"area_id" json:"area_id"`
 	BeerId       NullInt64    `db:"beer_id" json:"beer_id"`
+}
+
+type ReviewSummary struct {
+	ReviewID   int         `db:"review_id" json:"review_id"`
+	BeerName   string      `db:"beer_name" json:"beer_name"`
+	Evaluation NullFloat64 `db:"evaluation" json:"evaluation"`
+	ImagePath  NullString  `db:"image_path" json:"image_path"`
 }
 
 // ReviewDetail レビュー詳細情報
@@ -129,6 +136,16 @@ func GetReviews(tx *gorp.Transaction) ([]Review, error) {
 	return r, nil
 }
 
+func GetReviewsSummary(tx *gorp.Transaction) ([]ReviewSummary, error) {
+
+	r, err := selectToReviewsSummary(tx)
+	if err != nil {
+		return r, err
+	}
+
+	return r, nil
+}
+
 // GetReview レビュー情報を取得します
 func GetReview(tx *gorp.Transaction, id int) (ReviewDetail, error) {
 
@@ -160,6 +177,28 @@ func selectToReviews(tx *gorp.Transaction) ([]Review, error) {
 		  review
 		order by
 		  evaluation desc
+	`)
+	if err != nil {
+		return r, err
+	}
+
+	return r, nil
+}
+
+func selectToReviewsSummary(tx *gorp.Transaction) ([]ReviewSummary, error) {
+	var r []ReviewSummary
+	_, err := tx.Select(&r, `
+		select
+			r.review_id,
+			b.beer_name,
+			r.evaluation,
+			ifnull(bi.image_path, '') as image_path
+		from
+			review r
+			inner join beer b on r.beer_id = b.beer_id
+			left join beer_image bi on b.beer_id = bi.beer_id
+		order by
+			evaluation desc
 	`)
 	if err != nil {
 		return r, err
