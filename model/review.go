@@ -53,8 +53,8 @@ type ReviewDetail struct {
 	ReviewID     int         `db:"review_id" json:"review_id"`
 	DrinkingDay  NullString  `db:"drinking_day" json:"drinking_day"`
 	IsPublic     bool        `db:"is_public" json:"is_public"`
-	Brewery      NullString  `db:"brewery" json:"brewery"`
-	Beer_name    string      `db:"beer_name" json:"beer_name"`
+	BreweryName  NullString  `db:"brewery_name" json:"brewery_name"`
+	BeerName     string      `db:"beer_name" json:"beer_name"`
 	Store        NullString  `db:"store" json:"store"`
 	Bar          NullString  `db:"bar" json:"bar"`
 	Aroma        NullInt64   `db:"aroma" json:"aroma"`
@@ -193,11 +193,11 @@ func selectToReview(tx *gorp.Transaction, id int) (ReviewDetail, error) {
 			s.style_name,
 			f.flavor_name,
 			a.area_name,
-			bi.image_path
+			ifnull(bi.image_path, '') as image_path
 		from
 		  review r
 			inner join beer b on r.beer_id = b.beer_id
-			inner join beer_image bi on beer_id = bi.beer_id
+			left join beer_image bi on b.beer_id = bi.beer_id
 			inner join brewery bw on b.brewery_id = bw.brewery_id
 			left join country c on r.country_id = c.country_id
 			left join style s on r.style_id = s.style_id
