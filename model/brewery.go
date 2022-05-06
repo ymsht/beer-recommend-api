@@ -8,8 +8,8 @@ import (
  * Brewery
  */
 type Brewery struct {
-	BreweryId   int    `db:"brewery_id" json:"brewery_id"`
-	BreweryName string `db:"brewery_name" json:"brewery_name"`
+	BreweryId   int    `db:"brewery_id" json:"value"`
+	BreweryName string `db:"brewery_name" json:"label"`
 }
 
 // GetBreweries

@@ -8,8 +8,8 @@ import (
  * Beer スタイル情報
  */
 type Beer struct {
-	BeerID   int    `db:"beer_id" json:"beer_id"`
-	BeerName string `db:"beer_name" json:"beer_name"`
+	BeerID   int    `db:"beer_id" json:"value"`
+	BeerName string `db:"beer_name" json:"label"`
 }
 
 // GetBeers
