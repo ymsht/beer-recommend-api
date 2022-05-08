@@ -26,7 +26,7 @@ type Review struct {
 	MemberId     int          `db:"member_id" json:"member_id"`
 	DrinkingDay  sql.NullTime `db:"drinking_day" json:"drinking_day"`
 	IsPublic     bool         `db:"is_public" json:"is_public"`
-	BreweryName  NullString   `db:"brewery_name" json:"brewery_name"`
+	BreweryName  NullString   `db:"brewery" json:"brewery_name"`
 	BeerName     string       `db:"beer_name" json:"beer_name"`
 	Store        NullString   `db:"store" json:"store"`
 	Bar          NullString   `db:"bar" json:"bar"`
