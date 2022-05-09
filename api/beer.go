@@ -18,7 +18,7 @@ func GetBeers() echo.HandlerFunc {
 		id, _ := strconv.Atoi(id_str)
 		s, err := model.GetBeers(tx, id)
 		if err != nil {
-			c.Logger().Error(err.Error())
+			c.Logger().Error("ビール情報取得失敗", err.Error())
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 

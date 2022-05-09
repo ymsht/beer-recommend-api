@@ -26,21 +26,23 @@ func Login() echo.HandlerFunc {
 		var l LoginParam
 		err := c.Bind(&l)
 		if err != nil {
+			c.Logger().Error("ログインパラメータバインド失敗", err)
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
 		u, err := model.GethUser(tx, l.UserName)
 		if err != nil {
+			c.Logger().Error("ユーザ情報取得失敗", err)
 			return echo.ErrUnauthorized
 		}
 
 		err = bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(l.Password))
 		if err == bcrypt.ErrMismatchedHashAndPassword {
-			c.Logger().Error("パスワード不一致")
+			c.Logger().Error("パスワード不一致", err)
 			return echo.ErrUnauthorized
 		}
 		if err != nil {
-			c.Logger().Error(err)
+			c.Logger().Error("パスワード比較失敗", err)
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
@@ -50,6 +52,9 @@ func Login() echo.HandlerFunc {
 		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 		tokenString, _ := token.SignedString([]byte(SECRET))
 
-		return c.JSON(http.StatusOK, map[string]string{"token": tokenString})
+		return c.JSON(http.StatusOK, map[string]string{
+			"token": tokenString,
+			"name":  u.UserName,
+		})
 	}
 }

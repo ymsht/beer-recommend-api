@@ -24,11 +24,13 @@ func Signup() echo.HandlerFunc {
 		var s SignupParam
 		err := c.Bind(&s)
 		if err != nil {
+			c.Logger().Error("サインアップパラメータバインド失敗:", err)
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
 		hashed, err := bcrypt.GenerateFromPassword([]byte(s.Password), bcrypt.DefaultCost)
 		if err != nil {
+			c.Logger().Error("ハッシュ化失敗", err)
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
