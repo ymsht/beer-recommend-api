@@ -15,21 +15,6 @@ type Response struct {
 	Total   int         `json:"total"`
 }
 
-// GetReviews レビュー情報を返します
-func GetReviews() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		tx := c.Get("Tx").(*gorp.Transaction)
-		r, err := model.GetReviews(tx)
-		if err != nil {
-			c.Logger().Error("レビュー一覧取得失敗", err.Error())
-			return c.JSON(http.StatusInternalServerError, err)
-		}
-
-		var res = Response{r, len(r)}
-		return c.JSON(http.StatusOK, res)
-	}
-}
-
 func GetReviewsSummary() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		tx := c.Get("Tx").(*gorp.Transaction)
