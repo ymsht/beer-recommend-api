@@ -46,7 +46,7 @@ func Init() *echo.Echo {
 	{
 		v1.Use(middleware.JWT([]byte(api.SECRET)))
 
-		v1.GET("/reviews", api.GetReviews())
+		v1.GET("/reviews/summary", api.GetReviewsSummary())
 		v1.GET("/review/:id", api.GetReview())
 		v1.POST("/review", api.CreateReview())
 
@@ -57,6 +57,10 @@ func Init() *echo.Echo {
 		v1.GET("/countries", api.GetCountries())
 
 		v1.GET("/areas", api.GetAreas())
+
+		v1.GET("/beers/:id", api.GetBeers())
+
+		v1.GET("/breweries", api.GetBreweries())
 	}
 
 	return e
