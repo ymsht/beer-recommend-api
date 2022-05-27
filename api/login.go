@@ -50,7 +50,11 @@ func Login() echo.HandlerFunc {
 		claims := token.Claims.(jwt.MapClaims)
 		claims["name"] = u.UserName
 		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-		tokenString, _ := token.SignedString([]byte(SECRET))
+		tokenString, err := token.SignedString([]byte(SECRET))
+		if err != nil {
+			c.Logger().Error("トークン変換失敗", err)
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
 
 		return c.JSON(http.StatusOK, map[string]string{
 			"token": tokenString,
