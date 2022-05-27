@@ -4,6 +4,8 @@ import (
 	"beer-recommend-api/model"
 	"database/sql"
 	"fmt"
+	"log"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 
@@ -44,6 +46,8 @@ func getDbMap() *gorp.DbMap {
 	dbmap.AddTableWithName(model.Country{}, "country")
 	dbmap.AddTableWithName(model.Area{}, "area")
 	dbmap.AddTableWithName(model.User{}, "user")
+
+	dbmap.TraceOn("[gorp]", log.New(os.Stdout, "myapp:", log.Lmicroseconds))
 
 	return dbmap
 }
