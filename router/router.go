@@ -27,10 +27,11 @@ func Init() *echo.Echo {
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
-		AllowMethods: []string{echo.GET},
+		AllowMethods: []string{echo.GET, echo.POST, echo.DELETE},
 		AllowHeaders: []string{
 			"Access-Control-Allow-Headers",
-			"Content-Type", "Content-Length",
+			"Content-Type",
+			"Content-Length",
 			"Accept-Encoding",
 			"X-CSRF-Token",
 			"Authorization"},
@@ -49,6 +50,7 @@ func Init() *echo.Echo {
 		v1.GET("/reviews/summary", api.GetReviewsSummary())
 		v1.GET("/review/:id", api.GetReview())
 		v1.POST("/review", api.CreateReview())
+		v1.DELETE("/review/:id", api.DeleteReview())
 
 		v1.GET("/flavors", api.GetFlavors())
 
