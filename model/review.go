@@ -22,7 +22,7 @@ type NullFloat64 struct {
 
 // Review レビュー情報
 type Review struct {
-	ReviewId     int          `db:"review_id, primarykey, autoincrement" json:"review_id"`
+	ReviewId     int          `db:"review_id" json:"review_id"`
 	MemberId     int          `db:"member_id" json:"member_id"`
 	DrinkingDay  sql.NullTime `db:"drinking_day" json:"drinking_day"`
 	IsPublic     bool         `db:"is_public" json:"is_public"`
@@ -169,6 +169,11 @@ func DeleteReview(tx *gorp.Transaction, r Review) (int64, error) {
 	c, err := tx.Delete(&r)
 	if err != nil {
 		return 0, err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return 0, nil
 	}
 
 	return c, nil

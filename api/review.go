@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"gopkg.in/gorp.v1"
 )
@@ -47,9 +48,9 @@ func GetReview() echo.HandlerFunc {
 
 func CreateReview() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// token := c.Get("user").(*jwt.Token)
-		// claims := token.Claims.(jwt.MapClaims)
-		// name := claims["name"].(string)
+		token := c.Get("user").(*jwt.Token)
+		claims := token.Claims.(jwt.MapClaims)
+		name := claims["name"].(string)
 
 		var r model.Review
 		err := c.Bind(&r)
@@ -60,13 +61,12 @@ func CreateReview() echo.HandlerFunc {
 
 		tx := c.Get("Tx").(*gorp.Transaction)
 
-		// u, err := model.GethUser(tx, name)
-		// if err != nil {
-		// 	c.Logger().Error(err.Error())
-		// 	return c.JSON(http.StatusInternalServerError, err)
-		// }
-		// r.MemberId = u.UserId
-		r.MemberId = 1
+		u, err := model.GethUser(tx, name)
+		if err != nil {
+			c.Logger().Error(err.Error())
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+		r.MemberId = u.UserId
 		t := time.Now()
 		r.Create_date = t
 		r.Update_date = t
@@ -78,5 +78,24 @@ func CreateReview() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusCreated, r)
+	}
+}
+
+func DeleteReview() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id_str := c.Param("id")
+		tx := c.Get("Tx").(*gorp.Transaction)
+		id, _ := strconv.Atoi(id_str)
+		var r model.Review
+		r.ReviewId = id
+		r.MemberId = 0
+		c.Logger().Error("レビュー削除", r)
+		cnt, err := model.DeleteReview(tx, r)
+		if err != nil {
+			c.Logger().Error("レビュー削除失敗", err.Error())
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusNoContent, cnt)
 	}
 }
