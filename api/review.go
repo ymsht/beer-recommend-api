@@ -18,6 +18,7 @@ type Response struct {
 
 func GetReviewsSummary() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		c.Logger().Error("レビュー概要取得")
 		tx := c.Get("Tx").(*gorp.Transaction)
 		r, err := model.GetReviewsSummary(tx)
 		if err != nil {
@@ -86,13 +87,37 @@ func DeleteReview() echo.HandlerFunc {
 		id_str := c.Param("id")
 		tx := c.Get("Tx").(*gorp.Transaction)
 		id, _ := strconv.Atoi(id_str)
+
 		var r model.Review
 		r.ReviewId = id
-		r.MemberId = 0
-		c.Logger().Error("レビュー削除", r)
+
 		cnt, err := model.DeleteReview(tx, r)
 		if err != nil {
 			c.Logger().Error("レビュー削除失敗", err.Error())
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusNoContent, cnt)
+	}
+}
+
+func UpdateReview() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id_str := c.Param("id")
+		tx := c.Get("Tx").(*gorp.Transaction)
+		id, _ := strconv.Atoi(id_str)
+
+		var r model.Review
+		err := c.Bind(&r)
+		if err != nil {
+			c.Logger().Error("モデルパラメータバインド失敗", err.Error())
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+		r.ReviewId = id
+
+		cnt, err := model.UpdateReview(tx, r)
+		if err != nil {
+			c.Logger().Error("レビュー更新失敗", err.Error())
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 

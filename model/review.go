@@ -171,9 +171,13 @@ func DeleteReview(tx *gorp.Transaction, r Review) (int64, error) {
 		return 0, err
 	}
 
-	err = tx.Commit()
+	return c, nil
+}
+
+func UpdateReview(tx *gorp.Transaction, r Review) (int64, error) {
+	c, err := tx.Update()
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 
 	return c, nil
