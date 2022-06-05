@@ -121,6 +121,8 @@ func UpdateReview() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 
+		c.Logger().Info("レビュー更新成功 件数=", cnt)
+
 		return c.JSON(http.StatusNoContent, cnt)
 	}
 }
