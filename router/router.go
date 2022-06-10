@@ -27,7 +27,7 @@ func Init() *echo.Echo {
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
-		AllowMethods: []string{echo.GET, echo.POST, echo.DELETE},
+		AllowMethods: []string{echo.GET, echo.POST, echo.DELETE, echo.PUT},
 		AllowHeaders: []string{
 			"Access-Control-Allow-Headers",
 			"Content-Type",
