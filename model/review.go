@@ -58,7 +58,9 @@ type ReviewDetail struct {
 	ReviewID     int         `db:"review_id" json:"review_id"`
 	DrinkingDay  NullString  `db:"drinking_day" json:"drinking_day"`
 	IsPublic     bool        `db:"is_public" json:"is_public"`
+	BreweryId    NullString  `db:"brewery_id" json:"brewery_id"`
 	BreweryName  NullString  `db:"brewery_name" json:"brewery_name"`
+	BeerId       string      `db:"beer_id" json:"beer_id"`
 	BeerName     string      `db:"beer_name" json:"beer_name"`
 	Store        NullString  `db:"store" json:"store"`
 	Bar          NullString  `db:"bar" json:"bar"`
@@ -233,7 +235,9 @@ func selectToReview(tx *gorp.Transaction, id int) (ReviewDetail, error) {
 			r.review_id,
 		  ifnull(r.drinking_day, '') as drinking_day,
 			r.is_public,
+			b.brewery_id,
 			bw.brewery_name,
+			r.beer_id,
 			b.beer_name,
 			r.store,
 			r.bar,
