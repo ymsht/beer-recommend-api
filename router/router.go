@@ -45,7 +45,7 @@ func Init() *echo.Echo {
 
 	v1 := e.Group("/api/v1")
 	{
-		// v1.Use(middleware.JWT([]byte(api.SECRET)))
+		v1.Use(middleware.JWT([]byte(api.SECRET)))
 
 		v1.GET("/reviews/summary", api.GetReviewsSummary())
 		v1.GET("/review/:id", api.GetReview())

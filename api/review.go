@@ -69,8 +69,8 @@ func CreateReview() echo.HandlerFunc {
 		}
 		r.MemberId = u.UserId
 		t := time.Now()
-		r.Create_date = t
-		r.Update_date = t
+		r.CreateDate = t
+		r.UpdateDate = t
 
 		err = model.CreateReview(tx, r)
 		if err != nil {
@@ -113,7 +113,9 @@ func UpdateReview() echo.HandlerFunc {
 			c.Logger().Error("モデルパラメータバインド失敗", err.Error())
 			return c.JSON(http.StatusInternalServerError, err)
 		}
+		t := time.Now()
 		r.ReviewId = id
+		r.UpdateDate = t
 
 		cnt, err := model.UpdateReview(tx, r)
 		if err != nil {

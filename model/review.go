@@ -35,8 +35,8 @@ type Review struct {
 	Sharpness    NullInt64    `db:"sharpness" json:"sharpness"`
 	CountryId    NullInt64    `db:"country_id" json:"country_id"`
 	Memo         NullString   `db:"memo" json:"memo"`
-	Create_date  time.Time    `db:"create_date" json:"create_date"`
-	Update_date  time.Time    `db:"update_date" json:"update_date"`
+	CreateDate   time.Time    `db:"create_date" json:"create_date"`
+	UpdateDate   time.Time    `db:"update_date" json:"update_date"`
 	Evaluation   NullFloat64  `db:"evaluation" json:"evaluation"`
 	StyleId      NullInt64    `db:"style_id" json:"style_id"`
 	PurchaseDate sql.NullTime `db:"purchase_date" json:"purchase_date"`
