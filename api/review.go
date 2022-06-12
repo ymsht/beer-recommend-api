@@ -2,6 +2,7 @@ package api
 
 import (
 	"beer-recommend-api/model"
+	"beer-recommend-api/handler"
 	"net/http"
 	"strconv"
 	"time"
@@ -57,9 +58,13 @@ func GetReview() echo.HandlerFunc {
 
 func CreateReview() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		token := c.Get("user").(*jwt.Token)
-		claims := token.Claims.(jwt.MapClaims)
-		name := claims["name"].(string)
+		c.Logger().Error("レビュー登録")
+		c.Logger().Error("リクエストヘッダ", c.Request().Header)
+
+		user := c.Get("user").(*jwt.Token)
+		claims := user.Claims.(*handler.JwtCustomClaims)
+		name := claims.Name
+		//uid := claims["uid"].(int)
 
 		var r model.Review
 		err := c.Bind(&r)
