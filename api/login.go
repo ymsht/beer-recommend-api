@@ -1,6 +1,7 @@
 package api
 
 import (
+	"beer-recommend-api/handler"
 	"beer-recommend-api/model"
 	"net/http"
 	"time"
@@ -11,8 +12,6 @@ import (
 	"gopkg.in/gorp.v1"
 )
 
-const SECRET = "/HeVnSSwSDFI/W8v+YrGOdpXbvpmSARHSRdH4uOW73heR5LqbNAgUw=="
-
 type LoginParam struct {
 	UserName string `json:"user_name"`
 	Password string `json:"password"`
@@ -21,6 +20,8 @@ type LoginParam struct {
 // Login ログインします
 func Login() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		c.Logger().Error("ログイン")
+
 		tx := c.Get("Tx").(*gorp.Transaction)
 
 		var l LoginParam
@@ -46,18 +47,31 @@ func Login() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		token := jwt.New(jwt.SigningMethodHS256)
-		claims := token.Claims.(jwt.MapClaims)
-		claims["name"] = u.UserName
-		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-		tokenString, err := token.SignedString([]byte(SECRET))
+		claims := &handler.JwtCustomClaims{
+			u.UserId,
+			u.UserName,
+			jwt.StandardClaims{
+				ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
+			},
+		}
+
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+		t, err := token.SignedString(handler.SECRET)
 		if err != nil {
 			c.Logger().Error("トークン変換失敗", err)
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
+		// c.Logger().Error("JWT トークン取得")
+		// user := c.Get("user").(*jwt.Token)
+		// c.Logger().Error("JWT クレーム取得")
+		// cl := user.Claims.(jwt.MapClaims)
+		// c.Logger().Error("JWT ユーザ名取得")
+		// name := cl["name"].(string)
+		// c.Logger().Error("JWT ユーザ名", name)
+
 		return c.JSON(http.StatusOK, map[string]string{
-			"token": tokenString,
+			"token": t,
 			"name":  u.UserName,
 		})
 	}

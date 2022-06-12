@@ -45,7 +45,19 @@ func Init() *echo.Echo {
 
 	v1 := e.Group("/api/v1")
 	{
-		v1.Use(middleware.JWT([]byte(api.SECRET)))
+		v1.Use(middleware.JWTWithConfig(handler.Config))
+		// v1.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		// 	return func(c echo.Context) error {
+		// 		if err := next(c); err != nil {
+		// 			c.Error(err)
+		// 		}
+
+		// 		output := fmt.Sprintf("%#v", c.Request().Header)
+
+		// 		os.Stdout.Write([]byte(output + "\n"))
+		// 		return next(c)
+		// 	}
+		// })
 
 		v1.GET("/reviews/summary", api.GetReviewsSummary())
 		v1.GET("/review/:id", api.GetReview())

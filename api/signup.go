@@ -1,6 +1,7 @@
 package api
 
 import (
+	"beer-recommend-api/handler"
 	"beer-recommend-api/model"
 	"net/http"
 	"time"
@@ -43,12 +44,24 @@ func Signup() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		token := jwt.New(jwt.SigningMethodHS256)
-		claims := token.Claims.(jwt.MapClaims)
-		claims["name"] = u.UserName
-		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
-		tokenString, _ := token.SignedString([]byte(SECRET))
+		claims := &handler.JwtCustomClaims{
+			u.UserId,
+			u.UserName,
+			jwt.StandardClaims{
+				ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
+			},
+		}
 
-		return c.JSON(http.StatusOK, map[string]string{"token": tokenString})
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+		t, err := token.SignedString(handler.SECRET)
+		if err != nil {
+			c.Logger().Error("トークン変換失敗", err)
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		return c.JSON(http.StatusOK, map[string]string{
+			"token": t,
+			"name":  u.UserName,
+		})
 	}
 }
