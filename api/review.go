@@ -23,11 +23,6 @@ func GetReviewsSummary() echo.HandlerFunc {
 
 		c.Logger().Error("リクエストヘッダ", c.Request().Header)
 
-		// user := c.Get("user").(*jwt.Token)
-		// claims := user.Claims.(*handler.JwtCustomClaims)
-		// uid := claims.UID
-		// c.Logger().Error("UID", uid)
-
 		tx := c.Get("Tx").(*gorp.Transaction)
 		r, err := model.GetReviewsSummary(tx)
 		if err != nil {
