@@ -164,6 +164,8 @@ func CreateReview(tx *gorp.Transaction, r Review) error {
 		return err
 	}
 
+	tx.Commit()
+
 	return nil
 }
 
