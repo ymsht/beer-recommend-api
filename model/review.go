@@ -200,7 +200,7 @@ func selectToReviews(tx *gorp.Transaction) ([]Review, error) {
 		from
 		  review
 		order by
-		  evaluation desc
+		  evaluation desc, create_date
 	`)
 	if err != nil {
 		return r, err
@@ -222,7 +222,7 @@ func selectToReviewsSummary(tx *gorp.Transaction) ([]ReviewSummary, error) {
 			inner join beer b on r.beer_id = b.beer_id
 			left join beer_image bi on b.beer_id = bi.beer_id
 		order by
-			evaluation desc
+			r.evaluation desc, r.create_date
 	`)
 	if err != nil {
 		return r, err
